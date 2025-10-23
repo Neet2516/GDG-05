@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import Header from './section/Header';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 
 const VIEWS = {
   LOGIN: 'login',
   SIGNUP: 'signup',
 };
-
 
 const HeartPulseIcon = ({ className = "w-6 h-6" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -19,6 +21,7 @@ const SlashIcon = ({ className = "w-4 h-4" }) => (
         <path d="m2 2 20 20"/>
     </svg>
 );
+
 const GoogleIcon = () => (
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-5 h-5">
         <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.158,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
@@ -27,280 +30,6 @@ const GoogleIcon = () => (
         <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.612,2.392-1.928,4.425-3.64,6.012c-1.71,1.587-3.791,2.588-6.09,2.834c-0.178,0.024-0.355,0.048-0.533,0.071C33.329,38.452,40.158,32,40.158,24C40.158,21.821,39.69,19.897,38.995,18.117L43.611,20.083z"/>
     </svg>
 );
-
-
-
-
-
-const Header = ({ setView }) => {
-    const navItemClass = "text-gray-700 hover:text-orange-600 transition-colors cursor-pointer";
-    const loginBtnClass = "px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-md transition-all flex items-center";
-
-    return (
-        <header className="fixed top-0 left-0 w-full z-10 bg-orange-300/80 shadow-md">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                {/* Logo Section */}
-                <div className="flex items-center space-x-2">
-                    <HeartPulseIcon className="w-6 h-6 text-gray-700" />
-                    <span className="text-xl font-bold text-gray-700">HealthSnap</span>
-                </div>
-
-                {/* Navigation and Actions */}
-                <nav className="flex items-center space-x-4 sm:space-x-6">
-                    <span className="hidden md:inline-block" onClick={() => console.log('Nav: About us')}><a href="#" className={navItemClass}>About us</a></span>
-                    <span className="hidden md:inline-block" onClick={() => console.log('Nav: App')}><a href="#" className={navItemClass}>App</a></span>
-                    <button className={`${loginBtnClass} hidden sm:flex`} onClick={() => setView(VIEWS.LOGIN)}>
-                        Login &rarr;
-                    </button>
-                    <button className={`${loginBtnClass} bg-indigo-500!`} onClick={() => setView(VIEWS.SIGNUP)}>
-                        Sign Up &rarr;
-                    </button>
-                </nav>
-            </div>
-        </header>
-    );
-};
-
-const LoginPage = ({ setView }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [message, setMessage] = useState(null);
-
-    const handleLogin = (e) => {
-        e.preventDefault();
-        setMessage(null);
-        setIsLoading(true);
-
-        setTimeout(() => {
-            setIsLoading(false);
-            if (email === 'test@example.com' && password === 'password') {
-                setMessage({ type: 'success', text: 'Login Successful! (Simulated)' });
-            } else {
-                setMessage({ type: 'error', text: 'Invalid credentials. (Simulated)' });
-            }
-        }, 1500);
-    };
-
-    const handleGoogleLogin = () => {
-        setMessage({ type: 'info', text: 'Initiating "Continue with Google" (Simulated)' });
-    };
-    
-    useEffect(() => {
-        if (message) {
-            const timer = setTimeout(() => setMessage(null), 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [message]);
-
-    const inputClass = "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 text-gray-700 placeholder-gray-400";
-
-    return (
-        <form onSubmit={handleLogin} className="w-full max-w-md p-8 bg-white rounded-xl shadow-2xl space-y-6">
-            <div className="flex flex-col items-center space-y-2 mb-6">
-                <HeartPulseIcon className="w-12 h-12 text-blue-600" />
-                <h1 className="text-3xl font-extrabold text-gray-800">HealthSnap</h1>
-                <p className="text-sm text-gray-500">Sign in to your account</p>
-            </div>
-
-            {/* Message/Error Display */}
-            {message && (
-                <div className={`p-3 rounded-lg text-sm ${
-                    message.type === 'success' ? 'bg-green-100 text-green-700' :
-                    message.type === 'info' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700'
-                }`}>
-                    {message.text}
-                </div>
-            )}
-
-            {/* Email Input */}
-            <div>
-                <input
-                    type="email"
-                    placeholder="Email Address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={inputClass}
-                    required
-                />
-            </div>
-
-            {/* Password Input */}
-            <div>
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className={inputClass}
-                    required
-                />
-            </div>
-
-            {/* Login Button */}
-            <button
-                type="submit"
-                className={`w-full py-3 font-semibold rounded-lg shadow-lg transition-all flex items-center justify-center space-x-2 relative ${
-                    isLoading ? 'bg-orange-400 text-white cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600 text-white shadow-orange-500/50'
-                }`}
-                disabled={isLoading}
-            >
-                {isLoading ? (
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                ) : (
-                    'Login'
-                )}
-                {/* Simulated 'slashed eye' icon from design */}
-                <div className={`absolute right-4 ${isLoading ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
-                    <SlashIcon className="w-5 h-5 text-white"/>
-                </div>
-            </button>
-
-            {/* Forgot Password Link */}
-            <div className="text-center text-sm">
-                <button
-                    type="button"
-                    onClick={() => setMessage({ type: 'info', text: 'Password reset flow initiated (Simulated)' })}
-                    className="text-orange-500 hover:text-orange-600 font-medium transition-colors"
-                >
-                    Forgot your password?
-                </button>
-            </div>
-
-            {/* OR Separator */}
-            <div className="flex items-center space-x-2 my-4">
-                <div className="grow border-t border-gray-300"></div>
-                <span className="shrink text-sm text-gray-500 font-medium">OR</span>
-                <div className="grow border-t border-gray-300"></div>
-            </div>
-
-            {/* Continue with Google Button */}
-            <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="w-full py-3 border border-gray-300 bg-white text-gray-700 font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-colors flex items-center justify-center space-x-3"
-            >
-                <GoogleIcon />
-                <span>Continue with Google</span>
-            </button>
-
-            {/* Switch to Signup */}
-            <div className="text-center pt-4">
-                <span className="text-sm text-gray-600">Don't have an account? </span>
-                <button
-                    type="button"
-                    onClick={() => setView(VIEWS.SIGNUP)}
-                    className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
-                >
-                    Sign Up
-                </button>
-            </div>
-        </form>
-    );
-};
-
-const SignupPage = ({ setView }) => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-    });
-    const [isLoading, setIsLoading] = useState(false);
-    const [message, setMessage] = useState(null);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleSignup = (e) => {
-        e.preventDefault();
-        setMessage(null);
-        setIsLoading(true);
-
-        if (!formData.name || !formData.email || !formData.password) {
-            setMessage({ type: 'error', text: "Please fill in all required fields." });
-            setIsLoading(false);
-            return;
-        }
-
-        setTimeout(() => {
-            setIsLoading(false);
-            setMessage({ type: 'success', text: 'Sign Up Successful! (Simulated). Redirecting to Login.' });
-            setTimeout(() => setView(VIEWS.LOGIN), 2000);
-        }, 2000);
-    };
-
-    useEffect(() => {
-        if (message && message.type !== 'success') {
-            const timer = setTimeout(() => setMessage(null), 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [message]);
-
-    const inputClass = "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 text-gray-700 placeholder-gray-400";
-
-    return (
-        <form onSubmit={handleSignup} className="w-full max-w-md p-8 bg-white rounded-xl shadow-2xl space-y-6">
-            <div className="flex flex-col items-center space-y-2 mb-6">
-                <HeartPulseIcon className="w-12 h-12 text-blue-600" />
-                <h1 className="text-3xl font-extrabold text-gray-800">Create Account</h1>
-                <p className="text-sm text-gray-500">Join HealthSnap now!</p>
-            </div>
-
-            {/* Message/Error Display */}
-            {message && (
-                <div className={`p-3 rounded-lg text-sm ${
-                    message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                }`}>
-                    {message.text}
-                </div>
-            )}
-
-            {/* Name Input */}
-            <div>
-                <input type="text" name="name" placeholder="Full Name *" value={formData.name} onChange={handleChange} className={inputClass} required />
-            </div>
-            
-            {/* Email Input */}
-            <div>
-                <input type="email" name="email" placeholder="Email Address *" value={formData.email} onChange={handleChange} className={inputClass} required />
-            </div>
-
-            {/* Password Input */}
-            <div>
-                <input type="password" name="password" placeholder="Password *" value={formData.password} onChange={handleChange} className={inputClass} required />
-            </div>
-
-            {/* Sign Up Button */}
-            <button
-                type="submit"
-                className={`w-full py-3 font-semibold rounded-lg shadow-lg transition-all flex items-center justify-center space-x-2 ${
-                    isLoading ? 'bg-indigo-400 text-white cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/50'
-                }`}
-                disabled={isLoading}
-            >
-                {isLoading ? (
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                ) : (
-                    'Sign Up'
-                )}
-            </button>
-            
-            {/* Switch to Login */}
-            <div className="text-center pt-4">
-                <span className="text-sm text-gray-600">Already have an account? </span>
-                <button
-                    type="button"
-                    onClick={() => setView(VIEWS.LOGIN)}
-                    className="text-orange-500 hover:text-orange-600 font-semibold transition-colors"
-                >
-                    Log In
-                </button>
-            </div>
-        </form>
-    );
-};
 
 const App = () => {
     const [currentView, setCurrentView] = useState(VIEWS.LOGIN);
@@ -325,5 +54,4 @@ const App = () => {
         </div>
     );
 };
-
 export default App;
