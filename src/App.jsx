@@ -37,10 +37,13 @@ const App = () => {
     const renderView = useCallback(() => {
         switch (currentView) {
             case VIEWS.LOGIN:
+
                 return <LoginPage setView={setCurrentView} />;
             case VIEWS.SIGNUP:
+
                 return <SignupPage setView={setCurrentView} />;
             default:
+                
                 return <LoginPage setView={setCurrentView} />;
         }
     }, [currentView]);
