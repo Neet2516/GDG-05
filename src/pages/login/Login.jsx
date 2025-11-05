@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import side from "./side.png"
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const user = JSON.parse(localStorage.getItem("PD"));
@@ -10,6 +11,7 @@ function Login() {
     const handleSubmit = (event) => {
       event.preventDefault();
     };
+    const navigate = useNavigate();
   return (
     <div>
         <div className='mt-10 flex   items-center justify-center flex-wrap'>
@@ -51,10 +53,10 @@ function Login() {
             )}
                         </button>
         </div>
-                        <button className="bg-blue-600 text-white text-center py-2 my-10 w-3/4 font-bold" onClick={()=>{if (useremail === user.email) {
-                          console.log("HEy")
+                        <button className="bg-blue-600 text-white text-center py-2 my-10 w-3/4 font-bold" onClick={()=>{if (useremail === user.email) {navigate("/dashboard");
+
                         } else {
-                         console.log("DOOOOO") 
+                          alert("Try again") 
                         }}}>Login</button>
                     </form>
                 </div>

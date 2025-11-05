@@ -1,39 +1,90 @@
-import React from 'react'
-import Dashimg from './image.png'
-function Dashboard() {
-  return (
-    <div className='md:flex'>
-        <div className=' text-[#333333] font-semibold text-4xl w-full md:w-1/2 flex flex-col md:px-30 justify-center'> 
-        
-        <div className='w-2/3'>Stop guessing start understanding your body's <span className='text-blue-600'>patterns</span>
-        </div>
-        <div>
-            <ul className=' mt-5 text-sm text-black[list-style-image]'>
-                <li className='flex'><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-black  mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-    </svg>Log your Data, Effortlessly</li>
-                <li className='flex'><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-black  mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-    </svg>Uncover Hidden trends with AI</li>
-                <li className='flex'><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-black  mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-    </svg>Stay on Track with Smart Reminders</li>
-                <li className='flex'><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-black  mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-    </svg>Receive Personalized Wellness Tips
-</li></ul>
-<button className='bg-blue-600 text-[1rem] rounded px-3 py-3 text-white  flex items-center justify-center gap-5 mt-5 '><span>Start Tracking</span><svg width="15" height="10" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M19 6.5H1M19 6.5L13.4615 1M19 6.5L13.4615 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-</svg>
-</button>
-</div>
-        
-        
-    </div>
-        <div className='md:w-1/2 '><img className="md:h-150 w-150" src={Dashimg}  alt="" /></div>
-      
-    </div>
-  )
-}
+import React from 'react';
+import ActionCard from '../Dashboard/ActionCard'; // Assuming these are relative to the Dashboard.jsx location
+import TipCard from '../Dashboard/TipCard';
+import { useNavigate } from 'react-router-dom'; // Ensure you are using react-router-dom
 
-export default Dashboard
+// Assuming your DashboardPage is in src/pages/Dashboard/Dashboard.jsx 
+// and components are in src/pages/Dashboard/
+const DashboardPage = () => {
+  // Mock user data - could come from an API
+  const userName = "Ankita";
+  const navigate = useNavigate();
+
+  // Mock tip data - could come from an API
+  const currentTip = {
+    id: 1,
+    text: "Stay hydrated! Aim for 8 glass of water today",
+    completed: false, 
+  };
+
+  // --- UPDATED HANDLERS ---
+  
+  // Handler for Log New Data -> Navigates to the Survey/Tracking path
+  const handleStartTracking = () => {
+    // You must define the '/survey' route in your App.js/router setup
+    navigate('/survey'); 
+  };
+
+  // Handler for Set a Reminder -> Navigates to the Reminders path
+  const handleSetReminder = () => {
+    // You must define the '/reminders' route in your App.js/router setup
+    navigate('/reminders');
+  };
+
+  // Handler for Check My Trends
+  const handleViewTrends = () => {
+    // You must define the '/trends' route in your App.js/router setup
+    navigate('/trends');
+  };
+  
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      {/* Main content container with a subtle shadow and rounded corners */}
+      <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 md:p-8 lg:p-10 z-10 overflow-hidden">
+        {/* Abstract background shapes for visual appeal */}
+        <div className="absolute -top-16 -left-16 w-48 h-48 bg-blue-200 opacity-30 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-200 opacity-30 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
+
+        <div className="mb-8 flex items-center">
+          <span className="text-4xl mr-3">👋</span> 
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            Welcome, {userName}
+          </h1>
+        </div>
+
+        {/* Tip Section (image_41254b.png) */}
+        <div className="mb-10">
+          <TipCard tip={currentTip} />
+        </div>
+
+        {/* Action Cards Section (image_41254b.png) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <ActionCard
+            icon="📝" 
+            title="Log New Data"
+            description="Record symptoms, activities, mood"
+            buttonText="Start Tracking"
+            onClick={handleStartTracking} // Use the new handler
+          />
+          <ActionCard
+            icon="🔔"
+            title="Set a reminder"
+            description="Schedule meds, appointments ..."
+            buttonText="New Reminder"
+            onClick={handleSetReminder} // Use the new handler
+          />
+          <ActionCard
+            icon="📈"
+            title="Check My Trends"
+            description="hidden Pattern, recommendations"
+            buttonText="View Insights"
+            onClick={handleViewTrends} // Use the new handler
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardPage;

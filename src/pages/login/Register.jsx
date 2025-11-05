@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import google from './google.png'
 import side from './side.png'
+import { useNavigate } from 'react-router';
 
 function Register() {
+  const navigate = useNavigate();
   
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent page reload
@@ -49,6 +51,7 @@ function Register() {
 
                       
                         alert("Data saved to local storage!");
+                        navigate('/login')
                       } else {
                         alert("Passwords do not match!");
                       }
