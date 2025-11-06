@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaCheck } from 'react-icons/fa'; // For the checkmark icons
 import { MdArrowForward } from 'react-icons/md'; // For the next arrow on buttons
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 // Import the random image for all illustrations
 import RandomIllustration1 from '../assets/AboutUsPage/img1.png'; 
 import RandomIllustration2 from '../assets/AboutUsPage/img2.png'; 

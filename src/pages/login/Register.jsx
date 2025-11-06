@@ -1,20 +1,55 @@
 import React, { useState } from 'react'
 import google from './google.png'
 import side from './side.png'
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 function Register() {
   const navigate = useNavigate();
+  
   
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent page reload
     console.log("Form submitted:", { name, email });
   };
+  
   const [islogin,Setislogin]=useState(false)
   const [name ,Setname]=useState("");
   const [email ,Setemail]=useState("")
   const [password ,Setpassword]=useState("")
   const[confpass,Setconfpass]=useState("")
+
+  const handleResponse = async (name, email, password) => { // Added parameters for clarity
+    try {
+        const response = await fetch("https://healthsnap-68ry.onrender.com/api/auth/register", {
+            method: "POST", // Changed PUT to POST for registration
+            headers: {
+                "Content-Type": "application/json",
+            },
+            
+            body: JSON.stringify({ // Corrected body stringification
+              "fullname": `${name}`,
+              "email": `${email}`,
+              "password": `${password}` 
+            }),
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            // It's often better to throw the response object or a more structured error
+            throw new Error(errText || `Request failed with status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Registration successful:", result); // Updated log message
+        alert("User registered successfully!"); // Updated alert message
+    } catch (error) {
+        console.error("Error registering user:", error);
+        alert("Failed to register user");
+    }
+};
+
+// Example usage (assuming name, email, password variables exist in scope)
+// handleResponse(name, email, password);
   
   return (
     <div className='mt-10 flex   items-center justify-center flex-wrap'>
@@ -38,9 +73,9 @@ function Register() {
                       
                       if (confpass === password) {
                         console.log(name, email, password);
-                        
+                        handleResponse(name, email, password);
                         localStorage.setItem(
-                          "PD",
+                          "UserPersonalDetails",
                           JSON.stringify({
                             Login: islogin,
                             Name: name,
@@ -60,7 +95,7 @@ function Register() {
               Create
             </button>
 
-            <p className=' text-[0.8rem] text-center text-gray-500'>Already have an account? <span className='  text-orange-500'> Log in </span></p>
+            <Link to = "/login"><p className=' text-[0.8rem] text-center text-gray-500'>Already have an account? <span className='  text-orange-500'> Log in </span></p></Link>
             <div className='text-gray-500 text-center '>-----------OR------------</div>
             <div className='flex  flex-wrap justify-center items-center text-center px-1 bg-[#E3E5E5] py-3 border rounded my-5 w-3/4 overflow-x-hidden'>
                 <img src={google} alt=""  className='h-8'/>

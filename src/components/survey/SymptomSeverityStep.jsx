@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaQuestionCircle, FaClock, FaCheck } from 'react-icons/fa';
+import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import survey from '../../assets/SurveyPage/survey.png'
 
 const SeverityCard = ({ level, description, colorClass, isSelected, onClick }) => (
@@ -41,31 +42,31 @@ const SymptomSeverityStep = ({ data, updateData, onNext, onBack }) => {
         {/* Severity Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <SeverityCard
-            level="None"
+            level="none"
             description="No symptoms"
             colorClass="bg-green-500"
-            isSelected={data.severity === 'None'}
+            isSelected={data.severity === 'none'}
             onClick={handleSeveritySelect}
           />
           <SeverityCard
-            level="Mild"
+            level="mild"
             description="Slight discomfort"
             colorClass="bg-yellow-500"
-            isSelected={data.severity === 'Mild'}
+            isSelected={data.severity === 'mild'}
             onClick={handleSeveritySelect}
           />
           <SeverityCard
-            level="Moderate"
+            level="moderate"
             description="Noticeable symptoms"
             colorClass="bg-orange-500"
-            isSelected={data.severity === 'Moderate'}
+            isSelected={data.severity === 'moderate'}
             onClick={handleSeveritySelect}
           />
           <SeverityCard
-            level="Severe"
+            level="severe"
             description="Significant symptoms"
             colorClass="bg-red-500"
-            isSelected={data.severity === 'Severe'}
+            isSelected={data.severity === 'severe'}
             onClick={handleSeveritySelect}
           />
         </div>
@@ -89,6 +90,12 @@ const SymptomSeverityStep = ({ data, updateData, onNext, onBack }) => {
 
         {/* Navigation Button */}
         <div className="mt-10 flex justify-end">
+          <button
+                      onClick={onBack}
+                      className="flex items-center px-6 py-3 text-lg font-semibold rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors duration-300 mr-20"
+                    >
+                      <MdArrowBack className="mr-2" /> Back
+                    </button>
           <button
             onClick={onNext}
             disabled={!isFormValid}

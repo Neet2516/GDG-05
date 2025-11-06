@@ -96,7 +96,68 @@ const SurveyPage = ({ onSurveyComplete }) => {
       handleBackMajorStep(); // Move back to previous major step (Eval)
     }
   };
+  const userToken =localStorage.getItem("authToken");
 
+  const handleSubmitProfile = async () => {
+   
+    const payload = {
+        name: formData.name,
+        gender: formData.gender,
+        DOB: formData.dob, // Mapping 'dob' to 'DOB'
+        relationship: "Self", // Hardcoded based on your curl example
+        height: Number(formData.height),
+        weight: Number(formData.weight),
+        country: formData.country,
+        diet_type: formData.diet, // Mapping 'diet' to 'diet_type'
+        sleep_quality: formData.sleep, // Mapping 'sleep' to 'sleep_quality'
+        hydration_level: formData.hydration,
+        stress_level: formData.stress,
+        smoking: formData.smoking,
+        alcohol_intake: formData.alcohol,
+        symptoms: formData.symptoms,
+        symptom_severity: formData.severity, // Mapping 'severity' to 'symptom_severity'
+        details: formData.additionalDetails, // Mapping 'additionalDetails' to 'details'
+        steps_walked: Number(formData.stepsWalked),
+        sleep_hours: Number(formData.sleepHours),
+        water_intake: Number(formData.waterIntake),
+        BMI: Number(formData.bmi),
+        heart_rate: Number(formData.averageHeartRate),
+        calorie_intake: Number(formData.calorieIntake),
+    };
+
+    console.log("Submitting Payload:", payload);
+
+    // --- API Call Logic ---
+    try {
+        const response = await fetch('https://healthsnap-68ry.onrender.com/api/profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // This is the CRITICAL part for authorization:
+                'Authorization': `Bearer ${userToken}`,
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Profile created successfully:', data);
+            localStorage.setItem("Form" ,JSON.stringify(formData));
+            localStorage.setItem("Trends",JSON.stringify(data));
+            // ONLY navigate on success
+            navigate('/dashboard');
+        } else {
+            // Handle HTTP error statuses (400, 500, etc.)
+            const errorData = await response.json();
+            console.error('API Error:', response.status, errorData);
+            alert(`Failed to save profile: ${errorData.message || 'Server error'}`);
+        }
+    } catch (error) {
+        // Handle network errors (no internet, server down, etc.)
+        console.error('Network or Fetch Error:', error);
+        alert('A network error occurred. Please try again.');
+    }
+};
   // --- RENDER LOGIC ---
   const renderStep = () => {
     switch (currentStep) {
@@ -191,14 +252,13 @@ const SurveyPage = ({ onSurveyComplete }) => {
               >
                 ← Back
               </button>
+              
               <button
-                onClick={()=>{
-                  navigate('/dashboard')
-                }}
-                className="px-10 py-3 text-lg font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
-              >
-                Go to Dashboard →
-              </button>
+    onClick={handleSubmitProfile} // Call the new handler function
+    className="px-10 py-3 text-lg font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
+>
+    Go to Dashboard →
+</button>
             </div>
           </div>
         );

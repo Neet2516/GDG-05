@@ -67,10 +67,10 @@ const MetricsTrackingStep = ({ data, updateData, onNext, onBack }) => {
                 placeholder="e.g., 2.5 litres or 8"
                 value={data.waterIntake}
                 onChange={(e) => updateData('waterIntake', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                className="w-[75%] p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
               />
               <select
-                className="p-3 border border-gray-300 rounded-lg text-gray-600 font-medium focus:ring-blue-500 focus:border-blue-500"
+                className="p-3 border w-[25%] border-gray-300 rounded-lg text-gray-600 font-medium focus:ring-blue-500 focus:border-blue-500"
                 // Assuming we track the value only, not the unit for this demo
               >
                 {waterOptions.map(option => (

@@ -3,12 +3,9 @@ import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import survey from '../../assets/SurveyPage/survey.png'
 
 const SYMPTOM_OPTIONS = [
-  'Headache',
-  'Muscle pain',
-  'Dizzy',
-  'Fatigue',
-  'Fever',
-  'Vomiting',
+  "fever", "cough", "sore_throat", "runny_nose", "breath_shortness", "fatigue",
+    "headache", "body_pain", "appetite_loss", "nausea", "stomach_pain",
+    "sleep_quality", "mood_swings", "anxiety", "irritability", "concentration_loss"
 ];
 
 const SymptomStep = ({ data, updateData, onNext, onBack }) => {
