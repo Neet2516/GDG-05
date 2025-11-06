@@ -72,22 +72,40 @@ function Header() {
       Reminder
     </NavLink>
     <NavLink
-      to={isLoggedIn ? "/trends" : "#"}
-      onClick={(e) => {
-        if (!isLoggedIn) {
-          e.preventDefault(); 
-          alert("Please log in to access the survey!");
-        } else {
-          navigate("/trends");
-        }
-      }}
-      style={{
-        color: location.pathname === "/trends" ? "#60A5FA" : "inherit", // Tailwind's blue-400 hex
-      }}
-      className="font-medium hover:text-blue-400"
-    >
-      Trends
-    </NavLink>
+  to={isLoggedIn ? "/trends" : "#"}
+  onClick={(e) => {
+    const formData = localStorage.getItem("Form");
+    const trendsData = localStorage.getItem("Trends");
+
+    if (!isLoggedIn) {
+      e.preventDefault();
+      alert("⚠️ Please log in to access the dashboard!");
+      return;
+    }
+
+    if (!formData) {
+      e.preventDefault();
+      alert("📝 Please complete the health form first!");
+      return;
+    }
+
+    if (!trendsData) {
+      e.preventDefault();
+      alert("📊 No trend data found! Please submit your form to generate analysis.");
+      return;
+    }
+
+    // ✅ If everything exists, proceed to navigate
+    navigate("/trends");
+  }}
+  style={{
+    color: location.pathname === "/trends" ? "#60A5FA" : "inherit", // Tailwind blue-400
+  }}
+  className="font-medium hover:text-blue-400 transition-colors"
+>
+  Trends
+</NavLink>
+
     <NavLink
       to={isLoggedIn ? "/aboutus" : "#"}
       onClick={(e) => {

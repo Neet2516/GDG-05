@@ -18,25 +18,38 @@ const DashboardPage = () => {
     completed: false, 
   };
 
-  // --- UPDATED HANDLERS ---
-  
-  // Handler for Log New Data -> Navigates to the Survey/Tracking path
   const handleStartTracking = () => {
-    // You must define the '/survey' route in your App.js/router setup
     navigate('/survey'); 
   };
-
-  // Handler for Set a Reminder -> Navigates to the Reminders path
   const handleSetReminder = () => {
-    // You must define the '/reminders' route in your App.js/router setup
     navigate('/reminders');
   };
 
-  // Handler for Check My Trends
+  
   const handleViewTrends = () => {
-    // You must define the '/trends' route in your App.js/router setup
-    navigate('/trends');
-  };
+  const isLoggedIn = localStorage.getItem("UserPersonalDetails");
+  const formData = localStorage.getItem("Form");
+  const trendsData = localStorage.getItem("Trends");
+
+  if (!isLoggedIn) {
+    alert("⚠️ Please log in to set reminders!");
+    return;
+  }
+
+  if (!formData) {
+    alert("📝 Please complete the health form before setting reminders!");
+    return;
+  }
+
+  if (!trendsData) {
+    alert("📊 Please generate your health trends first!");
+    return;
+  }
+
+  // ✅ All good — navigate to reminders
+  navigate("/trends");
+};
+
   
 
   return (
