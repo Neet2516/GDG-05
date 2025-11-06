@@ -5,15 +5,6 @@ import { NavLink, useNavigate, useLocation} from 'react-router-dom';
 function Header() {
   const userDetails = JSON.parse(localStorage.getItem("UserPersonalDetails")) || {};
   const isLoggedIn = userDetails.Login === true;
-
-  const handleClick = (e) => {
-    if (!isLoggedIn) {
-      e.preventDefault(); // stop navigation
-      alert("Please log in to access the survey!");
-    } else {
-      navigate("/survey");
-    }
-  };
   return (
     <>
     <div className='bg-linear-to-r from-[#81d5fd] to-[#43c4ff] w-full flex items-center justify-between h-[10vh]'>
