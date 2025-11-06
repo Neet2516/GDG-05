@@ -2,29 +2,28 @@ import React from 'react';
 import { Footprints, Bed, Droplet, Flame, HeartPulse, Scale, Activity, Pill, LineChart, Plus, FileText, Dumbbell, Bell, Brain } from 'lucide-react';
 
 // --- Data from Local Storage "Form" Key ---
-const USER_FORM_DATA = JSON.parse(localStorage.getItem("Form"))
+const USER_FORM_DATA = JSON.parse(localStorage.getItem("Form")) || {};
+const TRENDS_ANALYSIS = JSON.parse(localStorage.getItem("Trends")) || {};
 
-const TRENDS_ANALYSIS = JSON.parse(localStorage.getItem("Trends"));
 
 // --- Configuration (Dynamically built using form data) ---
 const DASHBOARD_DATA = {
-    name: USER_FORM_DATA.name,
+    name: USER_FORM_DATA?.name || "Guest",
     greeting: "Your latest health analysis is ready.",
-    metrics: [
+    metrics: USER_FORM_DATA?.stepsWalked ? [
         { title: "STEPS TODAY", value: parseInt(USER_FORM_DATA.stepsWalked).toLocaleString(), unit: 'steps', change: '↑ 12 %', icon: <Footprints className="h-5 w-5" />, iconBg: 'bg-blue-500' },
         { title: "SLEEP DURATION", value: USER_FORM_DATA.sleepHours, unit: 'hrs', change: '↑ 3 %', icon: <Bed className="h-5 w-5" />, iconBg: 'bg-indigo-500' },
         { title: "WATER INTAKE", value: USER_FORM_DATA.waterIntake, unit: 'glasses', change: '↓ 12 %', icon: <Droplet className="h-5 w-5" />, iconBg: 'bg-cyan-500' },
         { title: "CALORIE INTAKE", value: parseInt(USER_FORM_DATA.calorieIntake).toLocaleString(), unit: 'kcal', change: '↑ 10 %', icon: <Flame className="h-5 w-5" />, iconBg: 'bg-red-500' },
-    ],
-    // Dummy Health Score since it wasn't provided, maintaining 'Excellent' for positive metrics
+    ] : [],
     healthScore: { score: 88, label: "Excellent", detail: "Excellent metrics across the board, focusing on gut health is key." },
-    symptoms: [
-        { name: USER_FORM_DATA.symptoms[0].replace('_', ' '), severity: USER_FORM_DATA.severity, duration: `${USER_FORM_DATA.durationDays} days` }
-    ],
-    vitals: [
+    symptoms: USER_FORM_DATA?.symptoms ? [
+        { name: USER_FORM_DATA.symptoms[0]?.replace('_', ' '), severity: USER_FORM_DATA.severity, duration: `${USER_FORM_DATA.durationDays} days` }
+    ] : [],
+    vitals: USER_FORM_DATA?.averageHeartRate ? [
         { title: "Heart rate", value: USER_FORM_DATA.averageHeartRate, unit: 'bpm', icon: <HeartPulse className="h-5 w-5" /> },
         { title: "BMI", value: USER_FORM_DATA.bmi, unit: 'kg/m²', icon: <Scale className="h-5 w-5" /> },
-    ],
+    ] : [],
 };
 
 
@@ -161,53 +160,65 @@ const TrendsPage = ({ setPage }) => (
 
                 {/* Current Symptoms Card (Span 1) */}
                 <HealthCard title="Current Symptoms" className="lg:col-span-1">
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium shadow-inner">
-                            {DASHBOARD_DATA.symptoms[0].name}
-                        </span>
-                        <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
-                            {DASHBOARD_DATA.symptoms[0].severity.toUpperCase()}
-                        </span>
-                    </div>
-                    <div className="flex space-x-4 text-sm text-gray-500 mb-6">
-                        <span className="flex items-center"><Pill className="mr-1 h-4 w-4" /> Duration:</span>
-                        <span className="font-semibold text-gray-700">{DASHBOARD_DATA.symptoms[0].duration}</span>
-                    </div>
-                    <button className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md shadow-blue-300">
-                        Update symptoms
-                    </button>
-                </HealthCard>
+  {DASHBOARD_DATA.symptoms.length > 0 ? (
+    <>
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium shadow-inner">
+          {DASHBOARD_DATA.symptoms[0].name}
+        </span>
+        <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
+          {DASHBOARD_DATA.symptoms[0].severity.toUpperCase()}
+        </span>
+      </div>
+      <div className="flex space-x-4 text-sm text-gray-500 mb-6">
+        <span className="flex items-center"><Pill className="mr-1 h-4 w-4" /> Duration:</span>
+        <span className="font-semibold text-gray-700">{DASHBOARD_DATA.symptoms[0].duration}</span>
+      </div>
+    </>
+  ) : (
+    <p className="text-gray-500 text-sm">No symptoms recorded yet.</p>
+  )}
+  <button className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md shadow-blue-300">
+    Update symptoms
+  </button>
+</HealthCard>
+
                 
                 {/* Health Analysis & Recommendation Card (Span 1) - UPDATED with Local Storage data */}
                 <HealthCard title="Health Analysis & Recommendation" className="lg:col-span-1">
+  {TRENDS_ANALYSIS?.data ? (
     <div className="space-y-4">
-        {/* Overall Health Trend */}
-        <div className="p-3 bg-green-50 border-l-4 border-green-500 rounded-lg">
-            <p className="text-sm font-semibold text-green-700 mb-1">Overall Health Trend</p>
-            <p className="text-2xl font-extrabold text-green-800 flex items-center">
-                {TRENDS_ANALYSIS.data.model_1.prediction}
-                <LineChart className="ml-2 h-6 w-6" />
-            </p>
-            <p className="text-xs text-green-600 mt-1">
-                Confidence: {Math.round(TRENDS_ANALYSIS.data.model_1.confidence * 100)}%
-            </p>
-        </div>
+      {/* Overall Health Trend */}
+      <div className="p-3 bg-green-50 border-l-4 border-green-500 rounded-lg">
+        <p className="text-sm font-semibold text-green-700 mb-1">Overall Health Trend</p>
+        <p className="text-2xl font-extrabold text-green-800 flex items-center">
+          {TRENDS_ANALYSIS?.data?.model_1?.prediction || "No data"}
+          <LineChart className="ml-2 h-6 w-6" />
+        </p>
+        <p className="text-xs text-green-600 mt-1">
+          Confidence: {TRENDS_ANALYSIS?.data?.model_1?.confidence ? Math.round(TRENDS_ANALYSIS.data.model_1.confidence * 100) : 0}%
+        </p>
+      </div>
 
-        {/* Wellness Recommendation */}
-        <div className="p-3 bg-purple-50 border-l-4 border-purple-500 rounded-lg">
-            <p className="text-sm font-semibold text-purple-700 mb-1">Personalized Wellness Focus</p>
-            <p className="text-2xl font-extrabold text-purple-800 flex items-center">
-                {TRENDS_ANALYSIS.data.model_2.prediction}
-                <Brain className="ml-2 h-6 w-6" />
-            </p>
-            <p className="text-xs text-purple-600 mt-1">Suggested by Wellness Model</p>
-        </div>
+      {/* Wellness Recommendation */}
+      <div className="p-3 bg-purple-50 border-l-4 border-purple-500 rounded-lg">
+        <p className="text-sm font-semibold text-purple-700 mb-1">Personalized Wellness Focus</p>
+        <p className="text-2xl font-extrabold text-purple-800 flex items-center">
+          {TRENDS_ANALYSIS?.data?.model_2?.prediction || "No data"}
+          <Brain className="ml-2 h-6 w-6" />
+        </p>
+        <p className="text-xs text-purple-600 mt-1">Suggested by Wellness Model</p>
+      </div>
     </div>
+  ) : (
+    <p className="text-gray-500 text-sm">No trends data available yet.</p>
+  )}
 
-    <button className="mt-4 w-full text-blue-600 font-semibold flex items-center justify-center hover:text-blue-800">
-        <FileText className="mr-2 h-5 w-5" /> View Full Log ({DASHBOARD_DATA.name}'s Entry)
-    </button>
+  <button className="mt-4 w-full text-blue-600 font-semibold flex items-center justify-center hover:text-blue-800">
+    <FileText className="mr-2 h-5 w-5" /> View Full Log ({DASHBOARD_DATA.name || "User"}'s Entry)
+  </button>
 </HealthCard>
+
 
             </div>
             
