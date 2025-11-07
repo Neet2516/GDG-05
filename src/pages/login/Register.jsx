@@ -52,7 +52,7 @@ function Register() {
 // handleResponse(name, email, password);
   
   return (
-    <div className='mt-10 flex   items-center justify-center flex-wrap'>
+    <div className='my-10 flex   items-center justify-center flex-wrap'>
             
         <div className='relative'>
             <img src={side} alt="" className='w-[screen] md:w-[50vw]'/>
@@ -85,7 +85,7 @@ function Register() {
                         );
 
                       
-                        alert("Data saved to local storage!");
+                        alert("Data saved to local storage!\n Please verify your email sent to you before login");
                         navigate('/login')
                       } else {
                         alert("Passwords do not match!");
@@ -96,7 +96,7 @@ function Register() {
             </button>
 
             <Link to = "/login"><p className=' text-[0.8rem] text-center text-gray-500'>Already have an account? <span className='  text-orange-500'> Log in </span></p></Link>
-            <div className='text-gray-500 text-center '>-----------OR------------</div>
+            <div className='text-gray-500 text-center '>-OR-</div>
             <div className='flex  flex-wrap justify-center items-center text-center px-1 bg-[#E3E5E5] py-3 border rounded my-5 w-3/4 overflow-x-hidden'>
                 <img src={google} alt=""  className='h-8'/>
                 <div className='pl-2 text-[1rem] font-semibold text-gray-500'>Continue with Google</div>
