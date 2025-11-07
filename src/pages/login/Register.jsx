@@ -48,9 +48,7 @@ function Register() {
     }
 };
 
-// Example usage (assuming name, email, password variables exist in scope)
-// handleResponse(name, email, password);
-  
+
   return (
     <div className='my-10 flex   items-center justify-center flex-wrap'>
             
