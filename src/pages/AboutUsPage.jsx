@@ -44,7 +44,15 @@ const AboutUsPage = () => {
               <button type="button" className="flex items-center justify-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors duration-300 shadow-md" onClick={() => navigate('/login')}>
                 Start <MdArrowForward className="ml-2" />
               </button>
-              <button className="flex items-center justify-center px-8 py-3 border border-blue-600 text-blue-600 font-semibold rounded-full hover:bg-blue-50 transition-colors duration-300">
+              <button className="flex items-center justify-center px-8 py-3 border border-blue-600 text-blue-600 font-semibold rounded-full hover:bg-blue-50 transition-colors duration-300" 
+                onClick={(e) => {
+              if (!isLoggedIn) {
+                e.preventDefault();
+                alert("Please log in to access the survey!");
+              } else {
+                navigate("/dashboard");
+              }
+            }}>
                 View trends
               </button>
             </div>

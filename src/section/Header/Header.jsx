@@ -9,6 +9,7 @@ function Header() {
   // 🔹 Initialize login state from localStorage
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const userDetails = JSON.parse(localStorage.getItem("UserPersonalDetails")) || {};
+    console.log(userDetails.Login);
     return userDetails.Login === true;
   });
 
